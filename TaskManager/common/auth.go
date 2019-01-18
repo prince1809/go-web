@@ -1,11 +1,11 @@
 package common
 
 import (
+	"context"
 	"crypto/rsa"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
-	"github.com/gorilla/context"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -66,7 +66,7 @@ func GenerateJWT(name, role string) (string, error) {
 		name,
 		role,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 20).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 200).Unix(),
 			Issuer:    "admin",
 		},
 	}
@@ -111,7 +111,10 @@ func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	}
 
 	if token.Valid {
-		context.Set(r, "user", token.Claims.(*AppClaims).UserName)
+		//httpContext.Set(r, "user", token.Claims.(*AppClaims).UserName)
+		//log.Printf("Context from auth: %s", httpContext.GetAll(r))
+		ctx := context.WithValue(r.Context(),"user",token.Claims.(*AppClaims).UserName)
+		r = r.WithContext(ctx)
 		next(w, r)
 	} else {
 		DisplayAppError(w, err, "Invalid Access Token", 401)

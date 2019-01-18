@@ -21,11 +21,11 @@ type (
 		Description string        `json:"description"`
 		CreatedOn   time.Time     `json:"createdon,omitempty"`
 		Due         time.Time     `json:"due,omitempty"`
-		status      string        `json:"status,omitempty"`
+		Status      string        `json:"status,omitempty"`
 		Tags        []string      `json:"tags,omitempty"`
 	}
 	TaskNote struct {
-		id          bson.ObjectId `bson:"_id,omitempty" json:"id"`
+		Id          bson.ObjectId `bson:"_id,omitempty" json:"id"`
 		TaskId      bson.ObjectId `json:"taskid"`
 		Description string        `json:"description"`
 		CreatedOn   time.Time     `json:"createdon,omitempty"`
